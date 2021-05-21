@@ -13,10 +13,15 @@ pip install nncf
 pip install ray[tune]
 pip install fastai
 pip install thop
+pip install efficientnet_pytorch
 
 ```
 
 **!!!!!目前代码库开始重构以及测试，完整的训练管道还未能使用，但是可以根据需要取所需的代码，重构完后会在知乎上通知，谢谢大家**
+
+**==想知道我的github做了什么工作，请到我的知乎专栏去查看目前已经完成的工作 #F44336==：**
+
+[我的知乎专栏](https://zhuanlan.zhihu.com/p/373137077)
 
 
 # About this repo:
@@ -27,11 +32,10 @@ pip install thop
 
 # Baseline
    First Baseline contains all the parts needed to build a Reid model, such as the reading of multiple Reid datasets, multiple common losses, multiple optimizations and lr_scheduler, and the calculation of MAP. 
-Then the model is Strong Baseline. 
+   Then the model is Strong Baseline. 
 
-   I also provide additional tools, such as hyperparameter tuning, and model compression.
 
-首先baseline包含了构建一个reid模型所需要的所有部分，比如多种reid数据集的读取，多种常用loss，多种优化器和学习率调整,以及map的计算，然后baseline的模型是strong baseline。同时我还提供了额外的工具，比如超参数的调整，以及模型压缩。
+首先baseline包含了构建一个reid模型所需要的所有部分，比如多种reid数据集的读取，多种常用loss，多种优化器和学习率调整,以及map的计算，然后baseline的模型是strong baseline。这部分最主要是为了小白入门使用的，以及用于project实现论文代码的。
 
 
 

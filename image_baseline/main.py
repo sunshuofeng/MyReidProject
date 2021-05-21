@@ -12,6 +12,7 @@ from utils.scheduler import *
 from utils.optimizer import *
 from utils.loss import *
 import torchvision.transforms as T
+from torchtools.optim import RangerLars
 
 def main(cfg):
     ckpt = cfg['ckpt']

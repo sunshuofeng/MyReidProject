@@ -1,0 +1,1 @@
+要训练intra-clip，只需将 model文件替换到video baseline的model，dataset替换到video baseline的dataset，然后使用video baseline的训练方式即可。
