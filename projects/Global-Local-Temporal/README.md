@@ -1,0 +1,1 @@
+要运行该代码，只需把Model.py文件替换video baseline里的model.py即可，然后按照video baseline的训练方式。
