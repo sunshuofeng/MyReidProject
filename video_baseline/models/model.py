@@ -62,5 +62,5 @@ class Baseline(nn.Module):
         return out
 
 
-nn.BatchNorm1d().bias.requires_grad
+
 
