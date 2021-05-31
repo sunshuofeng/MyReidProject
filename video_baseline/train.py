@@ -16,7 +16,7 @@ class Trainer:
         self.criterion=train_cfg['criterion']
 
 
-    def train_one_epoch(self,device,loader):
+    def train_one_epoch(self,device):
         for images,pids in self.train_loader:
             images=images.to(device)
             pids=pids.to(device)
@@ -38,7 +38,7 @@ class Trainer:
         with tqdm(total=epochs) as pbar:
             for epoch in range(epochs):
                     self.model.train()
-                    self.train_one_epoch(device,loader)
+                    self.train_one_epoch(device)
                     self.scheduler.step()
                     self.model.eval()
                     map=self.do_eval()
