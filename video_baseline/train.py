@@ -49,6 +49,9 @@ class Trainer:
                     pbar.update(1)
 
     def do_eval(self):
+        gallery_features = []
+        gallery_labels = []
+        gallery_cams = []
         with torch.no_grad():
             for images, labels, cams in self.val_loader:
                 B, C, H, W = images.shape
