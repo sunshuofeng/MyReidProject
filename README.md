@@ -4,7 +4,7 @@
 # purpose
    Regarding this library, my original intention is not to build a project like fastreid, Torchreid, which is highly scalable, practical, and widely used.         After all, I am only a student, and I have not yet possessed such capabilities. The purpose of establishing this library is more to exercise one's own ability in this area by reproducing various papers and modifying other people's codes. So in terms of code, the scalability may not be strong, and there may be many mistakes. I hope everyone who reads the code can help point out. If you have a better implementation method or some better tricks, you can put them forward and discuss them together. My qq is 2276153406 and my email is 2276153406@qq.com
    
- 关于这个库，我的初衷不是建立像fastreid，Torchreid这样的项目，该项目具有高度的可扩展性，实用性和广泛的用途。毕竟，我只是一个大三学生，而我还没有具备这样的能力。建立该库的目的更多是通过复现各种论文hi哦这修改他人的代码来提高自己在该领域的能力。因此，就代码而言，可扩展性可能不强，并且可能存在许多错误。希望所有阅读该代码的人都能帮助指出。如果您有更好的实现方法或一些更好的技巧，则可以提出它们并进行讨论。我的qq是2276153406，我的电子邮件是2276153406@qq.com
+ 关于这个库，我的初衷不是建立像fastreid，Torchreid这样的项目，该项目具有高度的可扩展性，实用性和广泛的用途。毕竟，我只是一个大三学生，而我还没有具备这样的能力。建立该库的目的更多是通过复现各种论文，修改他人的代码来提高自己在该领域的能力。因此，就代码而言，可扩展性可能不强，并且可能存在许多错误。希望所有阅读该代码的人都能帮助指出。如果您有更好的实现方法或一些更好的技巧，则可以提出它们并进行讨论。我的qq是2276153406，我的电子邮件是2276153406@qq.com
 # Requirements
 
 ``` python
