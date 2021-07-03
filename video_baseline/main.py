@@ -5,13 +5,14 @@ import sys
 import random
 import numpy as np
 import logging
-from datasets.build import MAKE_DATALOADER
+from datasets.dataset import *
 from models.model import *
 from train import *
-from utils.utils import  *
 from utils.scheduler import *
 from utils.optimizer import *
 from utils.loss import *
+import torchvision.transforms as T
+from torchtools.optim import RangerLars
 
 def main(cfg):
     ckpt = cfg['ckpt']
@@ -21,15 +22,22 @@ def main(cfg):
     fh = logging.FileHandler(logpt)
     fh.setLevel(logging.DEBUG)
     logger.addHandler(fh)
-    train_loaders, val_loader, num_query, num_classes = MAKE_DATALOADER(cfg)
+    train_transform = T.Compose(
+        [T.Resize(cfg['train_size']), T.ToTensor(), T.Normalize(mean=cfg['mean'], std=cfg['std'])])
+    train_loader, num_classes = Get_Video_train_DataLoader('datasets/mars_database/train_path.txt',
+                                                         'datasets/mars_database/train_info.npy', train_transform,num_workers=cfg['num_workers'],
+                                                           S=cfg['train_S'],track_per_class=cfg['train_track'],class_per_batch=cfg['train_bs'])
+    val_loader = Get_Video_test_DataLoader('datasets/mars_database/test_path.txt', 'datasets/mars_database/test_info.npy',
+                                           'datasets/mars_database/query_IDX.npy', train_transform,batch_size=cfg['test_bs'],S=cfg['test_S'])
 
-    model=Model(cfg,num_classes)
+
+    model=Baseline(num_classes)
     model=model.cuda()
     criterion=Criterion(cfg,num_classes)
     optimizer=build_optimizer(cfg,model)
     scheduler=build_scheuler(cfg,optimizer,cfg['epochs'],cfg['milestone'])
     train_cfg={}
-    train_cfg['train_loaders'] = train_loaders
+    train_cfg['train_loader'] = train_loader
     train_cfg['val_loader'] = val_loader
     train_cfg['checkpoint'] = checkpoint
     train_cfg['logger'] = logger
@@ -39,10 +47,6 @@ def main(cfg):
     train_cfg['optimizer']=optimizer
     train_cfg['scheduler']=scheduler
     train_cfg['criterion']=criterion
-    if cfg['val_data']=='P-DESTRE':
-       cfg['date']=True
-    else:
-        cfg['date']=False
     trainer=Trainer(train_cfg)
     trainer.train(cfg)
     return trainer
