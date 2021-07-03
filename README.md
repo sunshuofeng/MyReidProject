@@ -1,4 +1,4 @@
-!!!!最近在更新新的project，所以请暂时别用我的代码，会有错误  
+!!!!不知道为啥image baseline和video baseline的main互换了，这会导致报错，我已经更换过来
   
   
   This is the first code library I wrote myself, the purpose is to improve my ability in reid. 
