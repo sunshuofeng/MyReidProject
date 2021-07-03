@@ -1,4 +1,7 @@
-   This is the first code library I wrote myself, the purpose is to improve my ability in reid. 
+!!!!最近在更新新的project，所以请暂时别用我的代码，会有错误  
+  
+  
+  This is the first code library I wrote myself, the purpose is to improve my ability in reid. 
     Since it is the first time to write, the code style may not be very good, but try to make the code more readable and extensible, hope to help you
 
 # purpose
