@@ -60,6 +60,9 @@ if __name__ == '__main__':
 
 
     ##数据定义
+    parse.add_argument('--train_data',type=str,default= 'Market1501')
+    parse.add_argument('--val_data',type=str,default= 'Market1501')
+    parse.add_argument('--backbone',type=str,default= '50')
     parse.add_argument('--train_bs',type=int,default=4)
     parse.add_argument('--num_workers', type=int, default=0)
     parse.add_argument('--test_bs',type=int,default=4)
