@@ -1,8 +1,4 @@
-!!!!不知道为啥image baseline和video baseline的main互换了，这会导致报错，我已经更换过来
-  
-  
-  This is the first code library I wrote myself, the purpose is to improve my ability in reid. 
-    Since it is the first time to write, the code style may not be very good, but try to make the code more readable and extensible, hope to help you
+!!! baseline的代码进行修改中
 
 # purpose
    Regarding this library, my original intention is not to build a project like fastreid, Torchreid, which is highly scalable, practical, and widely used.         After all, I am only a student, and I have not yet possessed such capabilities. The purpose of establishing this library is more to exercise one's own ability in this area by reproducing various papers and modifying other people's codes. So in terms of code, the scalability may not be strong, and there may be many mistakes. I hope everyone who reads the code can help point out. If you have a better implementation method or some better tricks, you can put them forward and discuss them together. My qq is 2276153406 and my email is 2276153406@qq.com
