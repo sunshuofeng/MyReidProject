@@ -28,14 +28,14 @@ def main(cfg):
                                                          'datasets/mars_database/train_info.npy', train_transform,num_workers=cfg['num_workers'],
                                                            S=cfg['train_S'],track_per_class=cfg['train_track'],class_per_batch=cfg['train_bs'])
     val_loader = Get_Video_test_DataLoader('datasets/mars_database/test_path.txt', 'datasets/mars_database/test_info.npy',
-                                           'datasets/mars_database/query_IDX.npy', train_transform,batch_size=cfg['test_bs'],S=cfg['test_S'])
+                                           'datasets/mars_database/query_IDX.npy', train_transform,batch_size=cfg['test_bs'],S=cfg['train_S'])
 
 
     model=Baseline(num_classes)
     model=model.cuda()
     criterion=Criterion(cfg,num_classes)
-    optimizer=build_optimizer(cfg,model)
-    scheduler=build_scheuler(cfg,optimizer,cfg['epochs'],cfg['milestone'])
+    optimizer = torch.optim.Adam(model.parameters(), lr=cfg['lr'], weight_decay=cfg['decay'])
+    scheduler = torch.optim.lr_scheduler.StepLR(optimizer, 40)
     train_cfg={}
     train_cfg['train_loader'] = train_loader
     train_cfg['val_loader'] = val_loader
@@ -63,25 +63,22 @@ if __name__ == '__main__':
     torch.backends.cudnn.benchmark = True
     parse=argparse.ArgumentParser()
 
-    ##模型定义
-    parse.add_argument('--backbone',type=str,default='b0')
-    parse.add_argument('--pool_layer',type=str,default='GEM')
+
 
     ##数据定义
-    parse.add_argument('--train_data',type=str,nargs='+',default=['Duke'],help='dataset name')
-    parse.add_argument('--val_data',type=str,default='Duke')
+
     parse.add_argument('--train_bs',type=int,default=16)
-    parse.add_argument('--train_K_instances',type=int,default=4)
     parse.add_argument('--num_workers', type=int, default=0)
+    parse.add_argument('--')
     parse.add_argument('--test_bs',type=int,default=64)
     parse.add_argument('--padding',type=int,default=10)
-    parse.add_argument('--train_size',default=[384,128])
+    parse.add_argument('--train_size',default=[256,128])
     parse.add_argument('--mean',default=[0.485, 0.456, 0.406])
     parse.add_argument('--std',default=[0.229, 0.224, 0.225])
 
     ##训练定义
-    parse.add_argument('--epochs',type=int,default=50)
-    parse.add_argument('--lr',type=int,default=1e-3)
+    parse.add_argument('--epochs',type=int,default=120)
+    parse.add_argument('--lr',type=int,default=3e-4)
     parse.add_argument('--optimizer',type=str,default='SGD',help='optimizer_name')
     parse.add_argument('--scheduler',type=str,default='Warmup',help='scheduler_name')
     parse.add_argument('--momentum',type=int,default=0.9)

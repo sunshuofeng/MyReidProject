@@ -16,6 +16,7 @@ class Trainer:
         self.criterion=train_cfg['criterion']
 
 
+
     def train_one_epoch(self,device):
         for images,pids in self.train_loader:
             images=images.to(device)
@@ -32,7 +33,7 @@ class Trainer:
             scaler.update()
 
     def train(self,cfg):
-        epochs=cfg['epochs']
+        epochs=['epochs']
         max_map=0
         device=torch.device('cuda:0')
         with tqdm(total=epochs) as pbar:

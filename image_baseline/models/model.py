@@ -2,19 +2,15 @@ from models.layers import *
 from models.backbone import *
 import torch
 import torch.nn as nn
-
+from torchvision.models import resnet50
 class Model(nn.Module):
     def __init__(self,cfg,num_class):
         super(Model, self).__init__()
-        self.backbone,self.num_feature=build_backbone(cfg['backbone'])
-        if cfg['pool_layer']=='AVG':
-            pool_layer=nn.AdaptiveAvgPool2d(1)
-        elif cfg['pool_layer']=='MAX':
-            pool_layer=nn.AdaptiveMaxPool2d(1)
-        elif cfg['pool_layer']=='GEM':
-            pool_layer=GeneralizedMeanPoolingP()
-        else:
-            pool_layer=nn.Identity()
+        self.backbone = ResNet(cfg, 1)
+        model = resnet50(True)
+        state_dict = model.state_dict()
+        self.backbone.load_state_dict(state_dict, strict=False)
+        pool_layer=nn.AdaptiveAvgPool2d(1)
         self.neck=BNneckHead(self.num_feature,num_class,pool_layer=pool_layer)
 
     def forward(self,x):

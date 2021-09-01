@@ -102,8 +102,6 @@ class MARKET_MAP():
         self.num_query = num_query
         self.max_rank = max_rank
         self.feat_norm = feat_norm
-        self.one_day = one_day
-        self.date=date
         self.reset()
 
     def reset(self):
@@ -116,7 +114,7 @@ class MARKET_MAP():
         self.feats = []
         self.pids = []
         self.camids = []
-        self.dates = []
+
 
     def update(self, output):
 
@@ -124,9 +122,7 @@ class MARKET_MAP():
         self.feats.append(output[0])
         self.pids.append(output[1])
         self.camids.append(output[2])
-        if len(output)==4:
 
-           self.dates.append(date[3])
 
 
     def compute(self):
@@ -140,73 +136,22 @@ class MARKET_MAP():
         qf = feats[:self.num_query]
         q_pids = np.asarray(self.pids[:self.num_query])
         q_camids = np.asarray(self.camids[:self.num_query])
-        q_dates = np.asarray(self.dates[:self.num_query])
+
 
         '''每个query查询结果的特征及其id和摄像头id'''
         gf = feats[self.num_query:]
         g_pids = np.asarray(self.pids[self.num_query:])
         g_camids = np.asarray(self.camids[self.num_query:])
-        g_dates = np.asarray(self.dates[self.num_query:])
-        if self.date:
-            m, n = qf.shape[0], gf.shape[0]
 
-            distmat = torch.pow(qf, 2).sum(dim=1, keepdim=True).expand(m, n) + \
-                      torch.pow(gf, 2).sum(dim=1, keepdim=True).expand(n, m).t()
 
-            distmat.addmm_(1, -2, qf, gf.t())
-            distmat = distmat.cpu().numpy()
+        m, n = qf.shape[0], gf.shape[0]
 
-            cmc, mAP = MARKET_EVAL_FUNC(distmat, q_pids, g_pids, q_camids, g_camids)
-            return cmc,mAP
+        distmat = torch.pow(qf, 2).sum(dim=1, keepdim=True).expand(m, n) + \
+                  torch.pow(gf, 2).sum(dim=1, keepdim=True).expand(n, m).t()
 
-        else:
-            if self.one_day:
-                mean_map = 0
-                date = 0
-                q_index = np.where(q_dates == date)
-                date_qf = qf[q_index]
-                date_q_pids = q_pids[q_index]
-                date_q_camids = q_camids[q_index]
-                g_index = np.where(g_dates == date)
-                date_gf = gf[g_index]
-                date_g_pids = g_pids[g_index]
-                date_g_camids = g_camids[g_index]
-                m, n = date_qf.shape[0], date_gf.shape[0]
-                if m == 0:
-                    return 0
-                distmat = torch.pow(date_qf, 2).sum(dim=1, keepdim=True).expand(m, n) + \
-                          torch.pow(date_gf, 2).sum(dim=1, keepdim=True).expand(n, m).t()
+        distmat.addmm_(1, -2, qf, gf.t())
+        distmat = distmat.cpu().numpy()
 
-                distmat.addmm_(1, -2, date_qf, date_gf.t())
-                distmat = distmat.cpu().numpy()
+        cmc, mAP = MARKET_EVAL_FUNC(distmat, q_pids, g_pids, q_camids, g_camids)
+        return cmc[0],mAP
 
-                cmc, mAP = MARKET_EVAL_FUNC(distmat, date_q_pids, date_g_pids, date_q_camids, date_g_camids)
-                mean_map += mAP
-                return cmc, mean_map
-            else:
-                mean_map = 0
-
-                date = 0
-                q_index = np.where(q_dates == date)
-
-                date_qf = qf[q_index]
-                date_q_pids = q_pids[q_index]
-                date_q_camids = q_camids[q_index]
-
-                g_index = np.where(g_dates != date)
-                date_gf = gf[g_index]
-                date_g_pids = g_pids[g_index]
-                date_g_camids = g_camids[g_index]
-                m, n = date_qf.shape[0], date_gf.shape[0]
-
-                if m == 0 or n == 0:
-                    return 0
-                distmat = torch.pow(date_qf, 2).sum(dim=1, keepdim=True).expand(m, n) + \
-                          torch.pow(date_gf, 2).sum(dim=1, keepdim=True).expand(n, m).t()
-
-                distmat.addmm_(1, -2, date_qf, date_gf.t())
-                distmat = distmat.cpu().numpy()
-
-                cmc, mAP = MARKET_EVAL_FUNC(distmat, date_q_pids, date_g_pids, date_q_camids, date_g_camids)
-                mean_map += mAP
-                return cmc, mean_map

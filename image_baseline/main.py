@@ -7,7 +7,7 @@ import sys
 import random
 import numpy as np
 import logging
-from datasets.build import MAKE_DATALOADER
+from datasets.build import make_dataloader
 from models.model import *
 from train import *
 from utils.utils import  *
@@ -23,13 +23,12 @@ def main(cfg):
     fh = logging.FileHandler(logpt)
     fh.setLevel(logging.DEBUG)
     logger.addHandler(fh)
-    train_loaders, val_loader, num_query, num_classes = MAKE_DATALOADER(cfg)
-
+    train_loaders, val_loader, num_query, num_classes = make_dataloader(cfg)
     model=Model(cfg,num_classes)
     model=model.cuda()
     criterion=Criterion(cfg,num_classes)
-    optimizer=build_optimizer(cfg,model)
-    scheduler=build_scheuler(cfg,optimizer,cfg['epochs'],cfg['milestone'])
+    optimizer=torch.optim.Adam(model.parameters(),lr=cfg['lr'],weight_decay=cfg['decay'])
+    scheduler=torch.optim.lr_scheduler.StepLR(optimizer,40)
     train_cfg={}
     train_cfg['train_loaders'] = train_loaders
     train_cfg['val_loader'] = val_loader
@@ -41,10 +40,6 @@ def main(cfg):
     train_cfg['optimizer']=optimizer
     train_cfg['scheduler']=scheduler
     train_cfg['criterion']=criterion
-    if cfg['val_data']=='P-DESTRE':
-       cfg['date']=True
-    else:
-        cfg['date']=False
     trainer=Trainer(train_cfg)
     trainer.train(cfg)
     return trainer
@@ -60,21 +55,18 @@ if __name__ == '__main__':
 
 
     ##数据定义
-    parse.add_argument('--train_bs',type=int,default=4)
+    parse.add_argument('--train_bs',type=int,default=64)
     parse.add_argument('--num_workers', type=int, default=0)
-    parse.add_argument('--test_bs',type=int,default=4)
-    parse.add_argument('--train_S',type=int,default=6)
-    parse.add_argument('--test_S',type=int,default=6)
-    parse.add_argument('--train_track',type=int,default=8)
-
-
+    parse.add_argument('--test_bs',type=int,default=64)
     parse.add_argument('--train_size',default=[256,128])
     parse.add_argument('--mean',default=[0.485, 0.456, 0.406])
     parse.add_argument('--std',default=[0.229, 0.224, 0.225])
+    parse.add_argument('--train_K_instances',default=4)
+    parse.add_argument('--padding', type=int, default=10)
 
     ##训练定义
-    parse.add_argument('--epochs',type=int,default=50)
-    parse.add_argument('--lr',type=int,default=1e-3)
+    parse.add_argument('--epochs',type=int,default=120)
+    parse.add_argument('--lr',type=int,default=3e-4)
     parse.add_argument('--optimizer',type=str,default='SGD',help='optimizer_name')
     parse.add_argument('--scheduler',type=str,default='Warmup',help='scheduler_name')
     parse.add_argument('--momentum',type=int,default=0.9)

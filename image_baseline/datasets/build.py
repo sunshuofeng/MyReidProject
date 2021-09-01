@@ -5,21 +5,6 @@ from datasets.transforms import *
 import torch
 import torch.utils.data as Data
 
-data_root={
-    'Market1501':'data/market',
-    'VC':'data/vc',
-    'P-DESTRE':'data/Pdata',
-    'Real28':'data/real28',
-    'Duke':'data/duke'
-}
-dataset_type={
-    'Market1501':Market1501,
-    'VC':VC_Clothes,
-    'P-DESTRE':PDataset,
-    'Real28':Real28,
-    'Duke':Duke
-
-}
 
 
 def train_collate_fn(batch):
@@ -33,7 +18,8 @@ def val_collate_fn_date(batch):
     return torch.stack(imgs, dim=0),pids, camids,date
 
 
-def make_dataloader(dataset, cfg, pid_add=0):
+def make_dataloader(cfg):
+    dataset=Market1501(cfg['root'])
     train_transform = build_transforms(cfg, training=True)
     test_transform = build_transforms(cfg, training=False)
     data = dataset
@@ -54,18 +40,3 @@ def make_dataloader(dataset, cfg, pid_add=0):
 
 
 
-def MAKE_DATALOADER(cfg):
-    train_names = cfg['train_data']
-    val_name = cfg['val_data']
-    val_loader_dict = {}
-    train_loaders = []
-    all_num_class = 0
-    for name in train_names:
-        root = data_root[name]
-        dataset=dataset_type[name](root)
-        train_loader, val_loader, num_query, num_classes = make_dataloader(dataset, cfg, all_num_class)
-        train_loaders.append(train_loader)
-        val_loader_dict[name] = [val_loader, num_query]
-        all_num_class += num_classes
-    val_loader, num_query = val_loader_dict[val_name]
-    return train_loaders, val_loader, num_query, all_num_class

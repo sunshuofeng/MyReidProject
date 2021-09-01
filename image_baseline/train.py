@@ -43,17 +43,9 @@ class Trainer:
                     self.train_one_epoch(device,loader)
                     self.scheduler.step()
                     self.model.eval()
-                    if cfg['date']:
-                        map_all,map0,map1= self.do_eval(device,cfg['date'])
-                        print('epoch:{}--map_all:{}--map0:{}---map1:{}'.format(epoch,map_all,map0, map1))
-                        self.logger.info('epoch:{}--map_all:{}--map0:{}---map1:{}'.format(epoch,map_all,map0, map1))
-                        if map_all > max_map:
-                                max_map = map_all
-                                torch.save({'model': self.model.state_dict(), 'optimizer': self.optimizer.state_dict()},
-                                           'result.pt')
-                    else:
-                        map=self.do_eval(device,cfg['date'])
-                        print('epoch:{}---map:{}'.format(epoch,map))
+                    if epoch%5==0:
+                        rank1,map=self.do_eval(device,cfg['date'])
+                        print('epoch:{}---map:{}---rank1:{}'.format(epoch,map,rank1))
                         self.logger.info('epoch:{}---map:{}'.format(epoch,map))
                         if map>max_map:
                             max_map=map
@@ -62,12 +54,8 @@ class Trainer:
                     pbar.update(1)
 
     def do_eval(self,device,date):
-        if date:
-            metric_all=MARKET_MAP(self.num_query,date=True,one_day=True)
-            metric0=MARKET_MAP(self.num_query,date=False,one_day=True)
-            metric1=MARKET_MAP(self.num_query,date=False,one_day=False)
-        else:
-            metric=MARKET_MAP(self.num_query,date=True)
+
+        metric=MARKET_MAP(self.num_query,date=True)
         with torch.no_grad():
             if date:
                 for images,pids,cams,dates in self.val_loader:

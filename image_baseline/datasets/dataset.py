@@ -42,7 +42,7 @@ class Market1501():
 
     def get_imagedata_info(self, data):
             pids, cams = [], []
-            for _, pid, camid, _ in data:
+            for _, pid, camid in data:
                 pids += [pid]
                 cams += [camid]
             pids = set(pids)
@@ -80,7 +80,7 @@ class Market1501():
                 assert 1 <= camid <= 6
                 camid -= 1  # index starts from 0
                 if relabel: pid = pid2label[pid]
-                dataset.append((image_path,pid, camid,1))
+                dataset.append((image_path,pid, camid))
             return dataset
 
 
@@ -397,18 +397,18 @@ from PIL import Image
 
 
 class ImageDataset(Data.Dataset):
-    def __init__(self, dataset, transform=None, pid_add=0):
+    def __init__(self, dataset, transform=None):
         self.dataset = dataset
         self.transform = transform
-        self.pid_add = pid_add
+
 
     def __len__(self):
         return len(self.dataset)
 
     def __getitem__(self, index):
-        img_path, pid, camid,date = self.dataset[index]
+        img_path, pid, camid = self.dataset[index]
         img = Image.open(img_path)
         if self.transform is not None:
             image = self.transform(img)
 
-        return image, pid + self.pid_add, camid, img_path,date
+        return image, pid , camid, img_path
