@@ -80,7 +80,7 @@ class Market1501():
                 assert 1 <= camid <= 6
                 camid -= 1  # index starts from 0
                 if relabel: pid = pid2label[pid]
-                dataset.append((image_path,pid, camid))
+                dataset.append((img_path,pid, camid))
             return dataset
 
 
