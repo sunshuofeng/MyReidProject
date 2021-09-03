@@ -24,7 +24,7 @@ def make_dataloader(cfg):
     test_transform = build_transforms(cfg, training=False)
     data = dataset
     num_classes = data.num_train_pids
-    train_set=ImageDataset(data.train,train_transform,pid_add)
+    train_set=ImageDataset(data.train,train_transform)
     val_set = ImageDataset(data.query + data.gallery, test_transform)
     val_collate = val_collate_fn_date
     train_loader = Data.DataLoader(train_set, batch_size=cfg['train_bs'],
