@@ -57,28 +57,14 @@ class Trainer:
 
         metric=MARKET_MAP(self.num_query,date=True)
         with torch.no_grad():
-            if date:
-                for images,pids,cams,dates in self.val_loader:
-                    images=images.to(device)
-                    outs=self.model(images)
-                    for out in zip(outs['feature'],pids,cams,dates):
-                        metric_all.update(out)
-                        metric0.update(out)
-                        metric1.update(out)
-            else:
-                for images,pids,cams,dates in self.val_loader:
-                    images=images.to(device)
-                    outs=self.model(images)
-                    for out in zip(outs['feature'],pids,cams):
-                        metric.update(out)
-        if date:
-            cmc_all,map_all=metric_all.compute()
-            cmc0,map0=metric0.compute()
-            cmc1,map1=metric1.compute()
-            return map_all,map0,map1
-        else:
-            cmc,map=metric.compute()
-            return map
+            
+            for images,pids,cams,dates in self.val_loader:
+                images=images.to(device)
+                outs=self.model(images)
+                for out in zip(outs['feature'],pids,cams):
+     
+         cmc,map=metric.compute()
+         return map
 
 
 
