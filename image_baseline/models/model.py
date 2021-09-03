@@ -11,7 +11,7 @@ class Model(nn.Module):
         state_dict = model.state_dict()
         self.backbone.load_state_dict(state_dict, strict=False)
         pool_layer=nn.AdaptiveAvgPool2d(1)
-        self.neck=BNneckHead(self.num_feature,num_class,pool_layer=pool_layer)
+        self.neck=BNneckHead(2048,num_class,pool_layer=pool_layer)
 
     def forward(self,x):
         x=self.backbone(x)
