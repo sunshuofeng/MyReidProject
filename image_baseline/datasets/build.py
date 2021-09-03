@@ -8,14 +8,14 @@ import torch.utils.data as Data
 
 
 def train_collate_fn(batch):
-    imgs, pids, camid,path,date = zip(*batch)
+    imgs, pids, camid,path = zip(*batch)
     pids = torch.tensor(pids, dtype=torch.int64)
     return torch.stack(imgs, dim=0), pids
 
 ###对于验证集而言，为了提高验证的真实性，我们应该防止同一摄像头的图片进入验证（同一摄像头相当于数据泄露）
 def val_collate_fn_date(batch):
-    imgs, pids, camids, path,date= zip(*batch)
-    return torch.stack(imgs, dim=0),pids, camids,date
+    imgs, pids, camids, path= zip(*batch)
+    return torch.stack(imgs, dim=0),pids, camids
 
 
 def make_dataloader(cfg):
