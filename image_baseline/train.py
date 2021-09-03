@@ -64,8 +64,8 @@ class Trainer:
                 for out in zip(outs['feature'],pids,cams):
                     metric.update(out)
      
-         cmc,map=metric.compute()
-         return map
+        cmc,map=metric.compute()
+        return map
 
 
 
