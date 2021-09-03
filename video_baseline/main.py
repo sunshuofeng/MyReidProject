@@ -69,7 +69,7 @@ if __name__ == '__main__':
 
     parse.add_argument('--train_bs',type=int,default=16)
     parse.add_argument('--num_workers', type=int, default=0)
-    parse.add_argument('--')
+    parse.add_argument('--train_S',default=4)
     parse.add_argument('--test_bs',type=int,default=64)
     parse.add_argument('--padding',type=int,default=10)
     parse.add_argument('--train_size',default=[256,128])
