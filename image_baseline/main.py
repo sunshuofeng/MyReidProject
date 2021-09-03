@@ -55,7 +55,7 @@ if __name__ == '__main__':
 
 
     ##数据定义
-
+    parse.add_argument('--root')
     parse.add_argument('--train_bs',type=int,default=64)
 
     parse.add_argument('--train_data',type=str,default= 'Market1501')
