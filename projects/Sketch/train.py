@@ -100,7 +100,7 @@ class Trainer:
             for imgs, sketchs, pids, cams, dates in self.val_loader:
 
                 sketchs = sketchs.to(device)
-                feat, _ = self.reid_model(sketchs, pids)
+                feat, _ = self.model(sketchs, pids)
                 for out in zip(feat, pids, cams, dates):
                     metric0.update(out)
                     metric1.update(out)
