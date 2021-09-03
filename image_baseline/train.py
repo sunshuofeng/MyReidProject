@@ -62,6 +62,7 @@ class Trainer:
                 images=images.to(device)
                 outs=self.model(images)
                 for out in zip(outs['feature'],pids,cams):
+                    metric.update(out)
      
          cmc,map=metric.compute()
          return map
