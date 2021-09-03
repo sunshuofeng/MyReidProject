@@ -58,7 +58,7 @@ class Trainer:
         metric=MARKET_MAP(self.num_query,date=True)
         with torch.no_grad():
             
-            for images,pids,cams,dates in self.val_loader:
+            for images,pids,cams in self.val_loader:
                 images=images.to(device)
                 outs=self.model(images)
                 for out in zip(outs['feature'],pids,cams):
