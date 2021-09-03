@@ -17,8 +17,8 @@ class Trainer:
         self.criterion=train_cfg['criterion']
 
 
-    def train_one_epoch(self,device,loader):
-        for images,pids in loader:
+    def train_one_epoch(self,device):
+        for images,pids in self.train_loaders:
             images=images.to(device)
             pids=pids.to(device)
             self.optimizer.zero_grad()
@@ -38,9 +38,9 @@ class Trainer:
         device=torch.device('cuda:0')
         with tqdm(total=epochs*len(self.train_loaders)) as pbar:
             for epoch in range(epochs):
-                for loader in self.train_loaders:
+                
                     self.model.train()
-                    self.train_one_epoch(device,loader)
+                    self.train_one_epoch(device)
                     self.scheduler.step()
                     self.model.eval()
                     if epoch%5==0:
