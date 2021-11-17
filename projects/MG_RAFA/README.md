@@ -4,8 +4,8 @@
 https://github.com/jackie840129/STE-NVAN
 
 
-gpus后面接你可以跑的gpu数量
-python main.py --gpus 4
+
+python main.py 
 
 
 
